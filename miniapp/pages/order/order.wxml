@@ -1,0 +1,36 @@
+<view class="container">
+  <!-- 状态筛选 -->
+  <scroll-view class="tab-scroll" scroll-x>
+    <block wx:for="{{tabs}}" wx:key="value">
+      <text class="tab-item {{statusTab === item.value ? 'active' : ''}}"
+            bindtap="onTabChange" data-value="{{item.value}}">{{item.label}}</text>
+    </block>
+  </scroll-view>
+
+  <!-- 订单列表 -->
+  <block wx:for="{{orders}}" wx:key="id">
+    <view class="card order-item">
+      <view class="order-header">
+        <text>订单号: {{item.orderNo}}</text>
+        <text class="order-status status-{{item.status}}">{{statusText(item.status)}}</text>
+      </view>
+      <view class="order-body">
+        <text>车位ID: {{item.slotId}}</text>
+        <text>金额: ¥{{item.totalAmount}}</text>
+      </view>
+      <view class="order-desc">{{statusDesc(item.status)}}</view>
+      <view class="order-footer">
+        <button wx:if="{{item.status === 0}}" class="pay-btn" size="mini" bindtap="onPay" data-id="{{item.id}}">去支付</button>
+        <button wx:if="{{item.status === 0 || item.status === 1}}" class="cancel-btn" size="mini" bindtap="onCancel" data-id="{{item.id}}">取消</button>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{needLogin}}" class="empty">
+    <text>请先登录后查看订单</text>
+    <button size="mini" bindtap="goLogin" style="margin-top: 20rpx">去登录</button>
+  </view>
+  <view wx:elif="{{orders.length === 0}}" class="empty">
+    <text>暂无订单</text>
+  </view>
+</view>

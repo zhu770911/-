@@ -1,0 +1,28 @@
+<view class="container">
+  <!-- 已登录状态 -->
+  <block wx:if="{{isLogin && userInfo}}">
+    <view class="card profile-card">
+      <view class="avatar">👤</view>
+      <view class="nickname">{{userInfo.nickname}}</view>
+      <view class="phone">{{userInfo.phone}}</view>
+      <view class="credit">信用分: {{userInfo.creditScore}}</view>
+    </view>
+    <button class="logout-btn" bindtap="onLogout">退出登录</button>
+  </block>
+
+  <!-- 未登录状态 -->
+  <block wx:else>
+    <view class="card login-card">
+      <view class="login-title">{{showRegister ? '注册' : '登录'}}</view>
+      <input class="login-input" placeholder="手机号" value="{{phone}}"
+             bindinput="onPhoneInput" type="number" maxlength="11" />
+      <input class="login-input" placeholder="密码" password value="{{password}}"
+             bindinput="onPasswordInput" />
+      <button class="login-btn" bindtap="onLogin" wx:if="{{!showRegister}}">登 录</button>
+      <button class="login-btn" bindtap="onRegister" wx:else>注 册</button>
+      <text class="toggle-text" bindtap="toggleForm">
+        {{showRegister ? '已有账号？去登录' : '没有账号？去注册'}}
+      </text>
+    </view>
+  </block>
+</view>

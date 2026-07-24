@@ -1,0 +1,19 @@
+.tab-scroll { white-space: nowrap; padding: 16rpx 0; }
+.tab-item {
+  display: inline-block; padding: 12rpx 28rpx; font-size: 26rpx; color: #666;
+}
+.tab-item.active { color: #409EFF; font-weight: bold; border-bottom: 4rpx solid #409EFF; }
+.order-item { padding: 20rpx 24rpx; }
+.order-header { display: flex; justify-content: space-between; font-size: 24rpx; color: #999; }
+.order-status { font-weight: bold; }
+.order-status.status-0 { color: #909399; }
+.order-status.status-1 { color: #409EFF; }
+.order-status.status-2 { color: #E6A23C; }
+.order-status.status-3 { color: #67C23A; }
+.order-status.status-4 { color: #F56C6C; }
+.order-body { display: flex; justify-content: space-between; margin-top: 16rpx; font-size: 28rpx; }
+.order-desc { font-size: 22rpx; color: #C0C4CC; margin-top: 8rpx; }
+.order-footer { margin-top: 16rpx; text-align: right; }
+.pay-btn { background: #67C23A; color: #fff; margin-right: 12rpx; }
+.cancel-btn { background: #fff; color: #F56C6C; border: 1rpx solid #F56C6C; }
+.empty { text-align: center; color: #999; padding: 80rpx 0; }

@@ -1,0 +1,24 @@
+<view class="container">
+  <view class="search-bar">
+    <input placeholder="搜索停车场" class="search-input" />
+  </view>
+
+  <block wx:for="{{parkingList}}" wx:key="id">
+    <view class="card parking-item" bindtap="onParkingTap" data-id="{{item.id}}">
+      <view class="parking-name">{{item.name}}</view>
+      <view class="parking-address">{{item.address}}</view>
+      <view class="parking-info">
+        <text class="tag tag-free">空闲 {{item.freeSlots}} 个</text>
+        <text class="tag tag-total">共 {{item.totalSlots}} 个</text>
+        <text class="rate">¥{{item.ratePerHour}}/小时</text>
+      </view>
+      <view class="parking-distance" wx:if="{{item.distance != null}}">
+        <text class="distance-text">{{item.distance}} km</text>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{!loading && parkingList.length === 0}}" class="empty">
+    <text>暂无停车场信息</text>
+  </view>
+</view>

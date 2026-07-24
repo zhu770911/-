@@ -1,0 +1,14 @@
+.lot-name { font-size: 36rpx; font-weight: bold; }
+.lot-address { font-size: 24rpx; color: #999; margin-top: 8rpx; }
+.lot-meta { display: flex; justify-content: space-between; margin-top: 16rpx; font-size: 26rpx; color: #666; }
+.slot-grid { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 20rpx; }
+.slot-item {
+  width: calc(25% - 12rpx); padding: 20rpx 0; text-align: center; border-radius: 12rpx;
+  font-size: 24rpx; box-sizing: border-box;
+}
+.slot-item.free { background: #e1f3d8; border: 2rpx solid #67C23A; }
+.slot-item.booked { background: #faecd8; border: 2rpx solid #E6A23C; }
+.slot-item.occupied { background: #d9ecff; border: 2rpx solid #409EFF; }
+.slot-item.maintain { background: #f0f0f0; border: 2rpx solid #C0C4CC; }
+.slot-number { display: block; font-weight: bold; }
+.slot-status { display: block; font-size: 20rpx; margin-top: 4rpx; }

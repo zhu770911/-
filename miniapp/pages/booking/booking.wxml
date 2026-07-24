@@ -1,0 +1,41 @@
+<view class="container">
+  <view class="card">
+    <view class="booking-title">预约确认</view>
+    <view class="booking-slot">车位: {{slotNumber}}</view>
+    <view class="booking-lot">{{lotName}}</view>
+  </view>
+
+  <view class="card">
+    <view class="form-item">
+      <text class="label">预计入场时间</text>
+      <view class="picker-row">
+        <picker mode="date" value="{{enterDate}}" bindchange="onDateChange">
+          <text class="value {{enterDate ? '' : 'placeholder'}}">
+            {{enterDate || '选择日期'}}
+          </text>
+        </picker>
+        <picker mode="time" value="{{enterTime}}" bindchange="onTimeChange">
+          <text class="value {{enterTime ? '' : 'placeholder'}}">
+            {{enterTime || '选择时间'}}
+          </text>
+        </picker>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">预计停留时长</text>
+      <slider min="30" max="480" step="30" value="{{duration}}"
+              bindchange="onDurationChange" show-value block-size="20" />
+      <text class="duration-text">{{durationText}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="fee-row">
+      <text>预估费用</text>
+      <text class="fee-price">¥{{estimatedFee}}</text>
+    </view>
+  </view>
+
+  <button class="submit-btn" bindtap="onSubmit">确认预约</button>
+</view>

@@ -1,0 +1,16 @@
+.booking-title { font-size: 32rpx; font-weight: bold; }
+.booking-slot { font-size: 48rpx; font-weight: bold; color: #409EFF; margin-top: 12rpx; }
+.booking-lot { font-size: 26rpx; color: #999; margin-top: 8rpx; }
+.form-item { margin-top: 24rpx; }
+.label { display: block; font-size: 28rpx; color: #333; margin-bottom: 12rpx; }
+.picker-row { display: flex; gap: 20rpx; }
+.picker-row picker { flex: 1; padding: 16rpx 20rpx; background: #f5f7fa; border-radius: 10rpx; }
+.value { font-size: 28rpx; color: #333; }
+.placeholder { color: #C0C4CC; }
+.duration-text { font-size: 24rpx; color: #909399; margin-top: 8rpx; }
+.fee-row { display: flex; justify-content: space-between; align-items: center; font-size: 30rpx; }
+.fee-price { font-size: 40rpx; font-weight: bold; color: #E6A23C; }
+.submit-btn {
+  margin: 40rpx 0; background: #409EFF; color: #fff; font-size: 32rpx;
+  border-radius: 12rpx; padding: 16rpx 0;
+}

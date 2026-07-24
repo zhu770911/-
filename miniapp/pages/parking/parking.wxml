@@ -1,0 +1,25 @@
+<view class="container">
+  <!-- 停车场信息 -->
+  <view class="card" wx:if="{{parkingInfo}}">
+    <view class="lot-name">{{parkingInfo.name}}</view>
+    <view class="lot-address">{{parkingInfo.address}}</view>
+    <view class="lot-meta">
+      <text>空闲 {{parkingInfo.freeSlots}} / {{parkingInfo.totalSlots}}</text>
+      <text>¥{{parkingInfo.ratePerHour}}/小时</text>
+    </view>
+  </view>
+
+  <!-- 车位网格 -->
+  <view class="slot-grid">
+    <block wx:for="{{slots}}" wx:key="id">
+      <view
+        class="slot-item {{item.status === 0 ? 'free' : item.status === 1 ? 'booked' : item.status === 2 ? 'occupied' : 'maintain'}}"
+        bindtap="onSlotTap" data-slot="{{item}}">
+        <text class="slot-number">{{item.slotNumber}}</text>
+        <text class="slot-status">
+          {{item.status === 0 ? '空闲' : item.status === 1 ? '已约' : item.status === 2 ? '占用' : '维护'}}
+        </text>
+      </view>
+    </block>
+  </view>
+</view>

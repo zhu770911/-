@@ -1,0 +1,18 @@
+.search-bar { padding: 20rpx 0; }
+.search-input {
+  background: #fff; border-radius: 12rpx; padding: 16rpx 24rpx;
+  font-size: 28rpx; border: 1rpx solid #e5e5e5;
+}
+.parking-item { padding: 24rpx; }
+.parking-name { font-size: 32rpx; font-weight: bold; color: #333; }
+.parking-address { font-size: 24rpx; color: #999; margin-top: 8rpx; }
+.parking-info { margin-top: 16rpx; display: flex; gap: 16rpx; align-items: center; }
+.tag {
+  font-size: 22rpx; padding: 4rpx 12rpx; border-radius: 6rpx; color: #fff;
+}
+.tag-free { background: #67C23A; }
+.tag-total { background: #909399; }
+.rate { font-size: 26rpx; color: #E6A23C; margin-left: auto; }
+.parking-distance { margin-top: 8rpx; text-align: right; }
+.distance-text { font-size: 24rpx; color: #409EFF; }
+.empty { text-align: center; color: #999; padding: 80rpx 0; }
