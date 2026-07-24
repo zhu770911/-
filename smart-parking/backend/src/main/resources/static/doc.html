@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能停车云平台</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif; background: #f0f2f5; min-height: 100vh; }
+.header { background: linear-gradient(135deg, #409EFF, #337ecc); color: #fff; padding: 24px; text-align: center; }
+.header h1 { font-size: 26px; margin-bottom: 4px; }
+.header .sub { font-size: 13px; opacity: 0.8; }
+.toolbar { max-width: 1100px; margin: 16px auto 0; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+.token-box { display: flex; gap: 8px; align-items: center; flex: 1; margin-right: 20px; }
+.token-box input { flex: 1; padding: 8px 12px; border: 1px solid #dcdfe6; border-radius: 6px; font-size: 13px; }
+.token-box .has-token { border-color: #67C23A; background: #f0f9eb; }
+.btn { padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+.btn-blue { background: #409EFF; color: #fff; }
+.btn-blue:hover { background: #337ecc; }
+.btn-green { background: #67C23A; color: #fff; }
+.btn-green:hover { background: #5daf34; }
+.btn-red { background: #F56C6C; color: #fff; }
+.btn-grey { background: #909399; color: #fff; }
+.container { max-width: 1100px; margin: 16px auto 60px; padding: 0 20px; }
+.group { background: #fff; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); overflow: hidden; }
+.group-title { background: #f5f7fa; padding: 14px 20px; font-size: 17px; font-weight: bold; color: #303133; border-bottom: 1px solid #ebeef5; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.group-title .arrow { transition: transform 0.2s; }
+.group-title .arrow.open { transform: rotate(90deg); }
+.group-body { overflow: hidden; }
+.api-item { border-bottom: 1px solid #f0f0f0; }
+.api-item:last-child { border-bottom: none; }
+.api-bar { padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.15s; }
+.api-bar:hover { background: #f5f7fa; }
+.api-bar.active { background: #ecf5ff; }
+.method-badge { padding: 5px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; color: #fff; min-width: 60px; text-align: center; flex-shrink: 0; letter-spacing: 1px; }
+.GET { background: #67C23A; } .POST { background: #409EFF; } .PUT { background: #E6A23C; } .DELETE { background: #F56C6C; }
+.api-path-text { font-size: 14px; font-family: 'Consolas', 'Courier New', monospace; color: #303133; flex: 1; word-break: break-all; }
+.api-summary { font-size: 13px; color: #909399; flex-shrink: 0; white-space: nowrap; }
+.api-form { display: none; padding: 0 20px 20px; background: #fafafa; border-top: 1px solid #f0f0f0; }
+.api-form.show { display: block; }
+.form-row { margin-top: 14px; }
+.form-label { font-size: 13px; font-weight: bold; color: #606266; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.form-label .required { color: #F56C6C; font-size: 12px; }
+.form-input, .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid #dcdfe6; border-radius: 6px; font-size: 13px; font-family: 'Consolas', 'Courier New', monospace; margin-top: 4px; }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-input:focus, .form-textarea:focus { outline: none; border-color: #409EFF; }
+.param-hint { font-size: 12px; color: #909399; margin-top: 2px; }
+.btn-row { margin-top: 16px; display: flex; gap: 10px; align-items: center; }
+.response-box { margin-top: 12px; display: none; }
+.response-box.show { display: block; }
+.response-status { font-size: 13px; font-weight: bold; padding: 6px 0; }
+.response-status.ok { color: #67C23A; }
+.response-status.err { color: #F56C6C; }
+.response-body { background: #282c34; color: #abb2bf; padding: 14px; border-radius: 8px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; max-height: 300px; overflow-y: auto; font-family: 'Consolas', 'Courier New', monospace; }
+.loading-dot { display: inline-block; animation: blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.footer { text-align: center; color: #999; padding: 16px; font-size: 12px; }
+.notice { background: #fdf6ec; color: #E6A23C; padding: 10px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; border: 1px solid #faecd8; }
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>智能停车云平台</h1>
+    <div class="sub">接口文档 & 在线调试 · 所有请求直接发送到后端</div>
+</div>
+
+<div class="toolbar">
+    <div class="token-box">
+        <span style="font-size:13px;white-space:nowrap;color:#606266;">🔑 Token:</span>
+        <input type="text" id="tokenInput" placeholder="登录后自动填充…" onchange="onTokenChange()" />
+        <span id="tokenStatus" style="font-size:12px;color:#909399;">未登录</span>
+    </div>
+    <span style="font-size:12px;color:#909399;">本地 8080</span>
+</div>
+
+<div class="container" id="app">
+    <div style="text-align:center;padding:60px;color:#999;">加载接口列表中...</div>
+</div>
+<div class="footer">智能停车云平台 © 2026</div>
+
+<script>
+// ============ 全局状态 ============
+let API_DATA = null;
+let token = localStorage.getItem('smart_parking_token') || '';
+if (token) { document.getElementById('tokenInput').value = token; updateTokenUI(); }
+
+function onTokenChange() {
+    token = document.getElementById('tokenInput').value.trim();
+    if (token) localStorage.setItem('smart_parking_token', token);
+    else localStorage.removeItem('smart_parking_token');
+    updateTokenUI();
+}
+function updateTokenUI() {
+    const inp = document.getElementById('tokenInput');
+    const st = document.getElementById('tokenStatus');
+    if (token) { inp.className = 'form-input has-token'; st.textContent = '已就绪'; st.style.color = '#67C23A'; }
+    else { inp.className = 'form-input'; st.textContent = '未登录'; st.style.color = '#909399'; }
+}
+
+// ============ 加载 API 结构 ============
+fetch('/v3/api-docs')
+.then(r => r.json())
+.then(data => {
+    API_DATA = data;
+    const paths = data.paths || {};
+    const tags = data.tags || [];
+
+    // 按 tag 分组
+    const groups = {};
+    tags.forEach(t => { groups[t.name] = { desc: t.description || '', apis: [], open: true }; });
+    Object.entries(paths).forEach(([path, methods]) => {
+        Object.entries(methods).forEach(([method, detail]) => {
+            const tag = detail.tags?.[0] || '其他';
+            if (!groups[tag]) groups[tag] = { desc: tag, apis: [], open: true };
+            groups[tag].apis.push({
+                method: method.toUpperCase(),
+                path: path,
+                summary: detail.summary || '',
+                operationId: detail.operationId || '',
+                parameters: detail.parameters || [],
+                requestBody: detail.requestBody || null,
+            });
+        });
+    });
+
+    // 渲染
+    const icons = { '用户模块': '👤', '停车场模块': '🅿️', '预约模块': '📋', '订单模块': '📦', '管理端': '⚙️' };
+    let html = '<div class="notice">💡 点击接口展开表单 → 填写参数 → 点「发送请求」即可直接调用后端接口并查看真实返回数据</div>';
+    Object.entries(groups).forEach(([name, group]) => {
+        if (group.apis.length === 0) return;
+        html += '<div class="group">';
+        html += '<div class="group-title" onclick="toggleGroup(this)"><span class="arrow open">▶</span><span>' + (icons[name] || '📌') + ' ' + name + '</span><span style="font-size:12px;color:#909399;margin-left:auto;">' + group.apis.length + ' 个接口</span></div>';
+        html += '<div class="group-body">';
+        group.apis.forEach((api, idx) => {
+            const fid = (name + '_' + idx).replace(/[^a-zA-Z0-9一-龥]/g, '_');
+            html += '<div class="api-item">';
+            html += '<div class="api-bar" onclick="toggleForm(\'' + fid + '\')">';
+            html += '<span class="method-badge ' + api.method + '">' + api.method + '</span>';
+            html += '<span class="api-path-text">' + api.path + '</span>';
+            html += '<span class="api-summary">' + api.summary + '</span>';
+            html += '</div>';
+            html += '<div class="api-form" id="' + fid + '">';
+            html += buildForm(api, fid);
+            html += '</div>';
+            html += '</div>';
+        });
+        html += '</div></div>';
+    });
+    document.getElementById('app').innerHTML = html || '<div style="text-align:center;padding:60px;color:#999;">暂无接口</div>';
+})
+.catch(e => { document.getElementById('app').innerHTML = '<div style="text-align:center;padding:60px;color:#F56C6C;">加载失败: ' + e.message + '</div>'; });
+
+// ============ 构建表单 ============
+function buildForm(api, fid) {
+    let html = '';
+    const pathParams = api.parameters.filter(p => p.in === 'path');
+    const queryParams = api.parameters.filter(p => p.in === 'query');
+
+    // 路径参数
+    pathParams.forEach(p => {
+        html += '<div class="form-row">';
+        html += '<div class="form-label">' + p.name + (p.required ? '<span class="required">*必填</span>' : '') + '</div>';
+        html += '<div class="param-hint">' + (p.description || p.name) + ' · 类型: ' + (p.schema?.type || 'string') + '</div>';
+        html += '<input class="form-input path-param" data-name="' + p.name + '" placeholder="' + (p.example || '请输入' + p.name) + '" />';
+        html += '</div>';
+    });
+
+    // 查询参数
+    queryParams.forEach(p => {
+        html += '<div class="form-row">';
+        html += '<div class="form-label">' + p.name + (p.required ? '<span class="required">*必填</span>' : '') + '</div>';
+        html += '<div class="param-hint">' + (p.description || p.name) + ' · 类型: ' + (p.schema?.type || 'string') + '</div>';
+        html += '<input class="form-input query-param" data-name="' + p.name + '" placeholder="' + (p.example || '请输入') + '" />';
+        html += '</div>';
+    });
+
+    // 请求体
+    if (api.requestBody) {
+        const content = api.requestBody.content || {};
+        const jsonContent = content['application/json'];
+        if (jsonContent) {
+            const schema = jsonContent.schema || {};
+            let defaultBody = '{\n';
+            if (schema.$ref) {
+                const schemaName = schema.$ref.split('/').pop();
+                const def = (API_DATA.components?.schemas || {})[schemaName];
+                if (def && def.properties) {
+                    const props = [];
+                    Object.entries(def.properties).forEach(([k, v]) => {
+                        let val = '""';
+                        if (v.type === 'integer' || v.type === 'number') val = '0';
+                        if (v.example) val = JSON.stringify(v.example);
+                        props.push('  "' + k + '": ' + val + (v.description ? '  // ' + v.description : ''));
+                    });
+                    defaultBody += props.join(',\n') + '\n';
+                }
+            }
+            defaultBody += '}';
+            html += '<div class="form-row">';
+            html += '<div class="form-label">📨 请求体 (JSON)</div>';
+            html += '<textarea class="form-textarea request-body" style="min-height:100px;">' + defaultBody + '</textarea>';
+            html += '</div>';
+        }
+    }
+
+    html += '<div class="btn-row">';
+    const isLogin = api.path.includes('/login');
+    html += '<button class="btn btn-blue" onclick="sendRequest(\'' + fid + '\', \'' + api.method + '\', \'' + api.path + '\', ' + isLogin + ')">🚀 发送请求</button>';
+    html += '<span style="font-size:12px;color:#909399;">' + api.method + ' ' + api.path + '</span>';
+    html += '</div>';
+    html += '<div class="response-box" id="' + fid + '_response">';
+    html += '<div class="response-status" id="' + fid + '_status"></div>';
+    html += '<div class="response-body" id="' + fid + '_body"></div>';
+    html += '</div>';
+    return html;
+}
+
+// ============ UI 交互 ============
+function toggleGroup(el) {
+    const arrow = el.querySelector('.arrow');
+    const body = el.nextElementSibling;
+    if (body.style.display === 'none') { body.style.display = 'block'; arrow.classList.add('open'); }
+    else { body.style.display = 'none'; arrow.classList.remove('open'); }
+}
+
+function toggleForm(fid) {
+    const form = document.getElementById(fid);
+    if (!form) return;
+    const wasOpen = form.classList.contains('show');
+    // 关闭同组的其他表单
+    const parent = form.parentElement.parentElement;
+    parent.querySelectorAll('.api-form.show').forEach(f => f.classList.remove('show'));
+    parent.querySelectorAll('.api-bar.active').forEach(b => b.classList.remove('active'));
+    if (!wasOpen) {
+        form.classList.add('show');
+        form.previousElementSibling.classList.add('active');
+        // 聚焦第一个输入框
+        const firstInput = form.querySelector('input.form-input');
+        if (firstInput) setTimeout(() => firstInput.focus(), 100);
+    }
+}
+
+// ============ 发送请求 ============
+async function sendRequest(fid, method, pathTemplate, isLogin) {
+    const form = document.getElementById(fid);
+    const respBox = document.getElementById(fid + '_response');
+    const statusEl = document.getElementById(fid + '_status');
+    const bodyEl = document.getElementById(fid + '_body');
+
+    // 显示加载
+    respBox.classList.add('show');
+    statusEl.textContent = '发送中...';
+    statusEl.className = 'response-status';
+    bodyEl.textContent = '⏳';
+
+    try {
+        // 构建 URL：替换路径参数
+        let url = pathTemplate;
+        form.querySelectorAll('.path-param').forEach(inp => {
+            url = url.replace('{' + inp.dataset.name + '}', inp.value || '0');
+        });
+
+        // 查询参数
+        const queryParts = [];
+        form.querySelectorAll('.query-param').forEach(inp => {
+            if (inp.value) queryParts.push(inp.dataset.name + '=' + encodeURIComponent(inp.value));
+        });
+        if (queryParts.length > 0) url += '?' + queryParts.join('&');
+
+        // 请求头
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+
+        // 请求体
+        let body = null;
+        const bodyEl2 = form.querySelector('.request-body');
+        if (bodyEl2 && bodyEl2.value.trim() && method !== 'GET') {
+            try { JSON.parse(bodyEl2.value); } catch(e) {
+                statusEl.textContent = 'JSON 格式错误';
+                statusEl.className = 'response-status err';
+                bodyEl.textContent = e.message;
+                return;
+            }
+            body = bodyEl2.value;
+        }
+
+        const resp = await fetch(url, { method, headers, body });
+
+        // 解析响应
+        const text = await resp.text();
+        let json;
+        try { json = JSON.parse(text); } catch(e) { json = text; }
+
+        // 显示状态
+        if (resp.ok) { statusEl.textContent = '✅ ' + resp.status + ' ' + resp.statusText; statusEl.className = 'response-status ok'; }
+        else { statusEl.textContent = '❌ ' + resp.status + ' ' + resp.statusText; statusEl.className = 'response-status err'; }
+
+        // 美化 JSON
+        bodyEl.textContent = typeof json === 'object' ? JSON.stringify(json, null, 2) : json;
+
+        // 登录成功自动提取 token
+        if (isLogin && resp.ok && json.data && json.data.token) {
+            token = json.data.token;
+            document.getElementById('tokenInput').value = token;
+            localStorage.setItem('smart_parking_token', token);
+            updateTokenUI();
+            statusEl.textContent += ' · 🔑 Token 已自动保存';
+        }
+
+    } catch(e) {
+        statusEl.textContent = '❌ 网络错误';
+        statusEl.className = 'response-status err';
+        bodyEl.textContent = e.message + '\n\n请确认后端服务是否已启动：http://localhost:8080';
+    }
+}
+</script>
+</body>
+</html>
